@@ -20,7 +20,7 @@ function connect() {
         console.log('Connected: ' + frame);
         // /topic/greetings를 구독하겠다 -> 	@SendTo("/topic/greetings") 요기에 해당하는 메서드들에게 메시지를 받는 것
         stompClient.subscribe('/topic/greetings', function (greeting) {
-            showGreeting(JSON.parse(greeting.body).content);
+            showGreeting(JSON.parse(greeting.body));
         });
     });
 }
@@ -37,12 +37,12 @@ function sendName() {
     // /app/hello send하면 -> Controller에서 @MessageMapping("/hello") 가 붙은 메서드 실행
     // stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
 
-    const test = JSON.stringify({'name': $("#name").val()});
+    const test = JSON.stringify({'name': $("#name").val() ,'chat' : $("#message").val()});
     stompClient.send("/app/hello", {}, test);
 }
 
-function showGreeting(message) {
-    $("#greetings").append("<tr><td>" + message + "</td></tr>");
+function showGreeting(messages) {
+    $("#greetings").append("<tr><td>" + `${messages.name} : ${messages.chat}` + "</td></tr>");
 }
 
 $(function () {
